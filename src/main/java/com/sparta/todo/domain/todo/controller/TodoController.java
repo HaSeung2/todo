@@ -24,7 +24,7 @@ public class TodoController {
     private final int pageSize = 10;
     private final TodoService service;
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<TodoResponseDto>> todoFindAll(@RequestParam(defaultValue = "1")int nowPage){
         Pageable pageable = PageRequest.of(nowPage-1, pageSize, Sort.Direction.DESC, "modifiedAt");
         List<TodoResponseDto> todo = service.todoFindAll(pageable);
@@ -39,19 +39,19 @@ public class TodoController {
         return ResponseEntity.status(HttpStatus.OK).body(new TodoResponseDto(todo));
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<TodoResponseDto> todoCreate(@RequestBody @Valid TodoRequestDto reqDto,HttpServletRequest request){
         TodoResponseDto createTodo = service.todoCreate(reqDto,request);
         return ResponseEntity.status(HttpStatus.CREATED).body(createTodo);
     }
 
-    @PutMapping("/{id}")
-    public void todoModify(@PathVariable("id")Long id, @RequestBody ModifyDto modifyDto,HttpServletRequest request){
-        service.todoModify(id,modifyDto,request);
+    @PutMapping("/modify/{id}")
+    public void todoModify(@PathVariable("id")Long id, @RequestBody ModifyDto modifyDto){
+        service.todoModify(id,modifyDto);
     }
 
-    @DeleteMapping("/{id}")
-    public void todoDelete(@PathVariable("id") Long id, HttpServletRequest request){
-        service.todoDelete(id, request);
+    @DeleteMapping("/delete/{id}")
+    public void todoDelete(@PathVariable("id") Long id){
+        service.todoDelete(id);
     }
 }

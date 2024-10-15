@@ -13,6 +13,7 @@ public class TodoResponseDto {
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
     private final int commentsCount;
+    private final String weather;
 
     public TodoResponseDto(Todo todo){
         this.id = todo.getId();
@@ -21,5 +22,6 @@ public class TodoResponseDto {
         this.createdAt = todo.getCreatedAt();
         this.modifiedAt = todo.getModifiedAt();
         this.commentsCount = todo.getCommentCount();
+        this.weather = todo.getWeather();
     }
 }

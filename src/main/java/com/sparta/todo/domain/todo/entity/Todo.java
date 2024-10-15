@@ -2,7 +2,7 @@ package com.sparta.todo.domain.todo.entity;
 
 import com.sparta.todo.date.AuditingDate;
 import com.sparta.todo.domain.comment.entity.Comment;
-import com.sparta.todo.domain.management.Management;
+import com.sparta.todo.domain.manager.entity.Manager;
 import com.sparta.todo.domain.user.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -28,6 +28,9 @@ public class Todo extends AuditingDate {
     @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
+    private String weather;
+
     @Column
     private int commentCount;
 
@@ -35,30 +38,27 @@ public class Todo extends AuditingDate {
     private List <Comment> commentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "todo", cascade = CascadeType.REMOVE)
-    private List<Management> managementList = new ArrayList<>();
+    private List<Manager> manager = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static Todo from(String title, String content, User user) {
+    public static Todo from(String title, String content, User user, String weather) {
        Todo todo = new Todo();
-       todo.init(title,content,user);
+       todo.init(title,content,user,weather);
        return todo;
     }
 
-    private void init(@NotBlank String title, @NotBlank String content,User user){
+    private void init(@NotBlank String title, @NotBlank String content,User user, String weather) {
         this.title = title;
         this.content = content;
         this.user = user;
+        this.weather = weather;
     }
 
     public void modify(String title, String content) {
         this.title = title;
         this.content = content;
-    }
-
-    public boolean checkedUserId(Long id){
-        return this.user.getId().equals(id);
     }
 }
