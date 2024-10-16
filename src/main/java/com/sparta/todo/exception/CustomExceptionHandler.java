@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Slf4j
 public class CustomExceptionHandler {
 
-
     @ExceptionHandler(value = CustomException.class)
     public ResponseEntity<ErrorMessageResponseDto> CustomException(CustomException e) {
         return returnResponse(e.getErrorCode());

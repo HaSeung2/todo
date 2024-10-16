@@ -23,7 +23,6 @@ import java.io.IOException;
 @Order(1)
 @RequiredArgsConstructor
 public class TokenFilter extends OncePerRequestFilter {
-
     private final JwtUtil jwtUtil;
     private final UserRepository repository;
 
