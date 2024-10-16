@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/todo")
@@ -45,12 +46,14 @@ public class TodoController {
     }
 
     @PutMapping("/modify/{id}")
-    public void todoModify(@PathVariable("id")Long id, @RequestBody ModifyDto modifyDto){
+    public ResponseEntity<Objects> todoModify(@PathVariable("id")Long id, @RequestBody ModifyDto modifyDto){
         service.todoModify(id,modifyDto);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping("/delete/{id}")
-    public void todoDelete(@PathVariable("id") Long id){
+    public ResponseEntity<Objects> todoDelete(@PathVariable("id") Long id){
         service.todoDelete(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

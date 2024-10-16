@@ -9,6 +9,7 @@ public enum ErrorCode {
     UNSUPPORTED_TOKEN(HttpStatus.UNAUTHORIZED,"지원하지 않는 토큰"),
     NOT_MATCH_LOGIN(HttpStatus.UNAUTHORIZED,"이메일과 비밀번호 틀림"),
     EMAIL_DUPLICATION(HttpStatus.UNAUTHORIZED,"중복된 이메일입니다."),
+    NOT_MANAGER(HttpStatus.UNAUTHORIZED,"담당 유저로 등록되어 있지 않습니다."),
     NULL_TOKEN(HttpStatus.BAD_REQUEST, "토큰이 존재하지 않습니다."),
     NO_API_DATA(HttpStatus.BAD_REQUEST,"api 데이터가 존재하지 않습니다."),
     INVALID_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 JWT 서명."),

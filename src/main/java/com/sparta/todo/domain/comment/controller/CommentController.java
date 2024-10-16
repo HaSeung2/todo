@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/comment")
@@ -32,12 +33,14 @@ public class CommentController {
     }
 
     @PutMapping("/{id}")
-    public void modifyComment(@PathVariable("id") Long id, String content, HttpServletRequest req){
+    public ResponseEntity<Objects> modifyComment(@PathVariable("id") Long id, String content, HttpServletRequest req){
         cmtService.modifyComment(id,content,req);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
-    public void deleteComment(@PathVariable("id") Long id, HttpServletRequest req){
+    public ResponseEntity<Objects> deleteComment(@PathVariable("id") Long id, HttpServletRequest req){
         cmtService.deleteComment(id,req);
+        return ResponseEntity.noContent().build();
     }
 }
