@@ -38,13 +38,13 @@ public class CommentService {
 
     @Transactional
     public void modifyComment(Long id, String content, HttpServletRequest req) {
-        Comment findComment = isValidCommentAndUser(id,req);
+        Comment findComment = isValidCommentIdAndUser(id,req);
         findComment.modify(content);
     }
 
     @Transactional
     public void deleteComment(Long id, HttpServletRequest req) {
-        isValidCommentAndUser(id,req);
+        isValidCommentIdAndUser(id,req);
         cmtRepo.deleteById(id);
     }
 
@@ -52,10 +52,10 @@ public class CommentService {
         return todoRepo.findById(todoId).orElseThrow(()-> new CustomException(ErrorCode.NOT_TODO_ID));
     }
 
-    private Comment isValidCommentAndUser(Long commentId, HttpServletRequest req) {
+    private Comment isValidCommentIdAndUser(Long commentId, HttpServletRequest req) {
         Comment comment = cmtRepo.findById(commentId).orElseThrow(() -> new CustomException(ErrorCode.NOT_COMMENT_ID));
         User user = (User)req.getAttribute("user");
-        if(!comment.getCommentWriteUserId().equals(user.getId())) throw new CustomException(ErrorCode.NO_MY_COMMENT);
+        if(!comment.getCommentWriteUserId().equals(user.getId())) throw new CustomException(ErrorCode.NO_MY_WRITE_COMMENT);
         return comment;
     }
 }

@@ -24,7 +24,10 @@ public class TodoService{
     private final WeatherService weatherService;
 
     public List<TodoResponseDto> todoFindAll(Pageable pageable) {
-        return todoRepository.findAll(pageable).stream().map(TodoResponseDto :: new).toList();
+        int offsetNum = pageable.getPageNumber();
+        int limitNum = pageable.getPageSize();
+        offsetNum *= 10;
+        return todoRepository.findAll(limitNum,offsetNum).stream().map(TodoResponseDto :: new).toList();
     }
 
     @Transactional

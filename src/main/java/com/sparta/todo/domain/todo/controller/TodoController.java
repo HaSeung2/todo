@@ -25,11 +25,10 @@ public class TodoController {
     private final TodoService service;
 
     @GetMapping
-    public ResponseEntity<List<TodoResponseDto>> todoFindAll(@RequestParam(defaultValue = "1")int nowPage){
+    public ResponseEntity<List<TodoResponseDto>> todoFindAll(@RequestParam(defaultValue = "1", value = "nowPage")int nowPage){
         Pageable pageable = PageRequest.of(nowPage-1, pageSize, Sort.Direction.DESC, "modifiedAt");
         List<TodoResponseDto> todo = service.todoFindAll(pageable);
         if(todo.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
         return ResponseEntity.status(HttpStatus.OK).body(todo);
     }
 
