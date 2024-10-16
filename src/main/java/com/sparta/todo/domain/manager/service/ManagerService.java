@@ -36,6 +36,18 @@ public class ManagerService {
         return managerRepository.save(manager);
     }
 
+    @Transactional
+    public void delete(Long id, HttpServletRequest request) {
+        isValidManagerAndUserId(id,request);
+        managerRepository.deleteById(id);
+    }
+
+    private void isValidManagerAndUserId(Long id, HttpServletRequest request) {
+        User user = (User)request.getAttribute("user");
+        managerRepository.findByIdAndUserId(id,user.getId()).orElseThrow(()-> new CustomException(ErrorCode.NOT_MANAGER));
+    }
+
+
     private void managerDuplication(Long paramUserId, Long todoId) {
         managerRepository.findByUserIdAndTodoId(paramUserId,todoId).ifPresent(a ->{
             throw new CustomException(ErrorCode.MANAGER_DUPLICATION);
@@ -56,5 +68,4 @@ public class ManagerService {
     private User isValidUserID(Long id){
         return userRepository.findById(id).orElseThrow(()-> new CustomException(ErrorCode.NOT_USER_ID));
     }
-
 }

@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface ManagerRepository extends JpaRepository<Manager,Long> {
     Optional<Manager> findByUserIdAndTodoId(Long paramUserId, Long todoId);
+
+    Optional<Manager> findByIdAndUserId(Long id, Long userId);
 }

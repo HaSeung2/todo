@@ -9,14 +9,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/management")
+@RequestMapping("/api/manager")
 @RequiredArgsConstructor
 public class ManagerController {
     private final ManagerService managerService;
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<ManagerResponseDto> managerCreate(Long todoId, Long userId, HttpServletRequest request){
         ManagerResponseDto responseDto = new ManagerResponseDto(managerService.managerCreate(todoId, userId, request));
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ManagerResponseDto> managerDelete(@PathVariable("id") Long id, HttpServletRequest request){
+        managerService.delete(id,request);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
