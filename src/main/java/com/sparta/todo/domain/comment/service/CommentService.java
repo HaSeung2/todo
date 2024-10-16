@@ -44,7 +44,9 @@ public class CommentService {
 
     @Transactional
     public void deleteComment(Long id, HttpServletRequest req) {
-        isValidCommentIdAndUser(id,req);
+        Comment comment = isValidCommentIdAndUser(id,req);
+        Todo todo = isValidTodoId(comment.getTodo().getId());
+        todoRepo.updateCommentCount(todo.getCommentCount()-1,todo.getId());
         cmtRepo.deleteById(id);
     }
 
