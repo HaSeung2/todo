@@ -12,12 +12,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Objects;
+
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
+
+    @GetMapping
+    public ResponseEntity<List<UserResponseDto>> getUsers() {
+        return ResponseEntity.ok(userService.findAll());
+    }
+
+    @GetMapping("/myInfo")
+    public ResponseEntity<UserResponseDto> findMyInfo(HttpServletRequest res) {
+        return ResponseEntity.ok(userService.findById(res));
+    }
 
     @PostMapping("/join")
     public ResponseEntity<String> join(@Valid @RequestBody JoinRequestDto joinRequestDto) {
@@ -31,8 +44,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public void modify(@PathVariable("id")Long id, String userName, HttpServletRequest request) {
+    public ResponseEntity<Objects> modify(@PathVariable("id")Long id, String userName, HttpServletRequest request) {
         userService.modify(id,userName,request);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/{id}")

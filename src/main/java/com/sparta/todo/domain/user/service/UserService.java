@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,6 +29,15 @@ public class UserService {
     private final JwtUtil jwtUtil;
 
     private final String adminToken = "sksmsrhksflwkdla";
+
+    public List<UserResponseDto> findAll() {
+        return userRepository.findAll().stream().map(UserResponseDto::new).toList();
+    }
+
+    public UserResponseDto findById(HttpServletRequest res) {
+        User user = (User)res.getAttribute("user");
+        return userRepository.findById(user.getId()).map(UserResponseDto::new).orElseThrow(() -> new CustomException(ErrorCode.NOT_USER_ID));
+    }
 
     @Transactional
     public String join(@Valid JoinRequestDto joinRequestDto) {
@@ -76,4 +86,5 @@ public class UserService {
         if(!user.getId().equals(reqUser.getId())) throw new CustomException(ErrorCode.DIFFERENT_USER);
         return user;
     }
+
 }
