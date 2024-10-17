@@ -60,7 +60,7 @@ public class ManagerService {
         Long getUserId = user.getId();
 
         if(todoWriteUserId.equals(userId)) throw  new CustomException(ErrorCode.NO_MANAGER_MY);
-        if(!todoWriteUserId.equals(getUserId) && !userId.equals(getUserId)) throw new CustomException(ErrorCode.NO_MY_WRITE_TODO);
+        if(!todoWriteUserId.equals(getUserId)) throw new CustomException(ErrorCode.MANAGER_MY_WRITE_TODO);
 
         return todo;
     }
