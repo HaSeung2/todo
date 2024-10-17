@@ -11,4 +11,9 @@ public class ErrorMessageResponseDto {
         this.errorCode = errorCode.getHttpStatus();
         this.message = errorCode.getMessage();
     }
+
+    public ErrorMessageResponseDto(int errorCode, String message) {
+        this.errorCode = errorCode;
+        this.message = message;
+    }
 }
