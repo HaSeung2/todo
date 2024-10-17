@@ -5,9 +5,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PasswordEncoder {
-
+    private final int cost = 10;
     public String encode(String rawPassword) {
-        return BCrypt.withDefaults().hashToString(BCrypt.MIN_COST, rawPassword.toCharArray());
+        return BCrypt.withDefaults().hashToString(cost, rawPassword.toCharArray());
     }
 
     public boolean matches(String rawPassword, String encodedPassword) {

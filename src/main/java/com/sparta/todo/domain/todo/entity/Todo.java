@@ -50,7 +50,7 @@ public class Todo extends AuditingDate {
        return todo;
     }
 
-    private void init(@NotBlank String title, @NotBlank String content,User user, String weather) {
+    private void init(String title, String content,User user, String weather) {
         this.title = title;
         this.content = content;
         this.user = user;

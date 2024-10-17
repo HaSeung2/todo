@@ -40,7 +40,7 @@ public class UserService {
     }
 
     @Transactional
-    public String join(@Valid JoinRequestDto joinRequestDto) {
+    public String join(JoinRequestDto joinRequestDto) {
         String password = passwordEncoder.encode(joinRequestDto.getPassword());
         String email = joinRequestDto.getEmail();
 
@@ -56,7 +56,7 @@ public class UserService {
         return jwtUtil.createAccessToken(user.getId(), user.getRole().getAuthority());
     }
 
-    public UserResponseDto login(@Valid LoginRequestDto loginRequestDto){
+    public UserResponseDto login(LoginRequestDto loginRequestDto){
         Optional<User> checkUser = userRepository.findByEmail(loginRequestDto.getEmail());
         if(checkUser.isEmpty())  throw new CustomException(ErrorCode.NOT_MATCH_LOGIN);
 
