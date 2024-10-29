@@ -3,18 +3,24 @@ package com.sparta.todo.domain.user.controller;
 
 import com.sparta.todo.domain.user.dto.JoinRequestDto;
 import com.sparta.todo.domain.user.dto.LoginRequestDto;
+import com.sparta.todo.domain.user.dto.UserModifyRequestDto;
 import com.sparta.todo.domain.user.dto.UserResponseDto;
 import com.sparta.todo.domain.user.entity.User;
 import com.sparta.todo.domain.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Objects;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/user")
@@ -46,15 +52,15 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Objects> modify(@PathVariable("id") Long id,
-                                          String userName,
-                                          HttpServletRequest request) {
-        userService.modify(id, userName, User.getUser(request));
+    public ResponseEntity<Void> modify(@PathVariable("id") Long id,
+                                       @RequestBody UserModifyRequestDto userModifyRequestDto,
+                                       HttpServletRequest request) {
+        userService.modify(id, userModifyRequestDto.getUserName(), User.getUser(request));
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id, HttpServletRequest request) {
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id, HttpServletRequest request) {
         userService.delete(id, User.getUser(request));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

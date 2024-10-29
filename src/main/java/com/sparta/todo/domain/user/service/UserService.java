@@ -54,10 +54,7 @@ public class UserService {
     }
 
     public UserResponseDto login(LoginRequestDto loginRequestDto){
-        Optional<User> checkUser = userRepository.findByEmail(loginRequestDto.getEmail());
-        if(checkUser.isEmpty())  throw new CustomException(ErrorCode.NOT_MATCH_LOGIN);
-
-        User findUser = checkUser.get();
+        User findUser = userRepository.findByEmail(loginRequestDto.getEmail()).orElseThrow(() ->  new CustomException(ErrorCode.NOT_MATCH_LOGIN));
         if(!passwordEncoder.matches(loginRequestDto.getPassword(), findUser.getPassword())) throw new CustomException(ErrorCode.NOT_MATCH_LOGIN);
 
         String token = jwtUtil.createAccessToken(findUser.getId(), findUser.getRole().getAuthority());
@@ -66,18 +63,18 @@ public class UserService {
     }
 
     public void delete(Long id, User user) {
-        isValidUser(id,user);
+        getUser(id,user);
         userRepository.delete(user);
     }
 
     @Transactional
     public void modify(Long id, String userName, User user) {
-        isValidUser(id,user);
-        user.modify(userName);
+        User findUser = getUser(id,user);
+        findUser.modify(userName);
     }
 
-    public boolean isValidUser(Long id, User user) {
-        userRepository.findByUserId(id);
-        return user.isValidUser(id);
+    public User getUser(Long id, User user) {
+        user.isValidUser(id);
+        return userRepository.findByUserId(id);
     }
 }
