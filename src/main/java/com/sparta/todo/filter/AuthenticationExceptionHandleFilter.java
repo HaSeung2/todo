@@ -1,6 +1,5 @@
 package com.sparta.todo.filter;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.todo.exception.CustomException;
 import com.sparta.todo.exception.ErrorCode;
@@ -24,7 +23,7 @@ import java.io.IOException;
 @Slf4j
 @Component
 @Order(0)
-public class LogFilter extends OncePerRequestFilter{
+public class AuthenticationExceptionHandleFilter extends OncePerRequestFilter{
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
