@@ -50,7 +50,7 @@ public class CommentService {
 
     private Comment getCommentByIdAndUser(Long commentId, User user) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ErrorCode.NOT_COMMENT_ID));
-        comment.isValidWriteUser(user.getId());
+        comment.validWriteUser(user.getId());
         return comment;
     }
 }

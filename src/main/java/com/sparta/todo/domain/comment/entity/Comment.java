@@ -29,10 +29,12 @@ public class Comment extends AuditingDate {
     @JoinColumn(name = "todo_id")
     private Todo todo;
 
-    public static Comment createComment(String content,
-                                        String userName,
-                                        Long commentWriteUserId,
-                                        Todo todo) {
+    public static Comment createComment(
+        String content,
+        String userName,
+        Long commentWriteUserId,
+        Todo todo
+    ) {
         Comment comment = new Comment();
         comment.content = content;
         comment.userName = userName;
@@ -45,8 +47,9 @@ public class Comment extends AuditingDate {
         this.content = content;
     }
 
-    public boolean isValidWriteUser(Long id) {
-        if(!this.writeUserId.equals(id)) throw new CustomException(ErrorCode.NO_MY_WRITE_COMMENT);
-        return true;
+    public void validWriteUser(Long id) {
+        if (! this.writeUserId.equals(id)) {
+            throw new CustomException(ErrorCode.NO_MY_WRITE_COMMENT);
+        }
     }
 }
