@@ -3,7 +3,10 @@ package com.sparta.todo.domain.user.entity;
 import com.sparta.todo.date.AuditingDate;
 import com.sparta.todo.domain.manager.entity.Manager;
 import com.sparta.todo.domain.todo.entity.Todo;
+import com.sparta.todo.exception.CustomException;
+import com.sparta.todo.exception.ErrorCode;
 import jakarta.persistence.*;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +26,7 @@ public class User extends AuditingDate {
     private String email;
     @Column(nullable = false)
     private String password;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "user_name")
     private String userName;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -35,17 +38,24 @@ public class User extends AuditingDate {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Manager> manager = new ArrayList<>();
 
-    public static User from(String email, String password, String userName, UserRole role) {
+    public static User createUser(String email, String password, String userName, UserRole role) {
         User user = new User();
-        user.init(email,password,userName,role);
+        user.email = email;
+        user.password = password;
+        user.userName = userName;
+        user.role = role;
         return user;
     }
 
-    private void init(String email, String password, String userName, UserRole role) {
-        this.email = email;
-        this.password = password;
-        this.userName = userName;
-        this.role = role;
+    public static User getUser(HttpServletRequest request){
+        return (User)request.getAttribute("user");
+    }
+
+    public boolean isValidUser(Long id){
+            if(!id.equals(this.id)){
+                throw new CustomException(ErrorCode.DIFFERENT_USER);
+            }
+            return true;
     }
 
     public void modify(String userName) {
