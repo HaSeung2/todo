@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByTodoId(Long id);
+
+    int countByTodoId(Long id);
 }
