@@ -24,4 +24,5 @@ public class TodoResponseDto {
         this.commentsCount = todo.getCommentCount();
         this.weather = todo.getWeather();
     }
+
 }
