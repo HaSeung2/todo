@@ -56,7 +56,12 @@ public class Todo extends AuditingDate {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static Todo createTodo(String title, String content, User user, String weather) {
+    public static Todo createTodo(
+        String title,
+        String content,
+        User user,
+        String weather
+    ) {
         Todo todo = new Todo();
         todo.title = title;
         todo.content = content;
@@ -65,7 +70,10 @@ public class Todo extends AuditingDate {
         return todo;
     }
 
-    public void modify(String title, String content) {
+    public void modify(
+        String title,
+        String content
+    ) {
         this.title = title;
         this.content = content;
     }
@@ -74,10 +82,15 @@ public class Todo extends AuditingDate {
         this.commentCount = commentCount;
     }
 
-    public boolean isValidWriteUser(Long id) {
-        if (! this.getUser().getId().equals(id)) {
-            throw new CustomException(ErrorCode.NO_MY_WRITE_TODO);
+    public void validWriteUser(
+        Long id,
+        User user
+    ) {
+        if (! this.getUser().getId().equals(user.getId())) {
+            throw new CustomException(ErrorCode.MANAGER_MY_WRITE_TODO);
         }
-        return true;
+        if (this.getUser().getId().equals(id)) {
+            throw new CustomException(ErrorCode.NO_MANAGER_MY);
+        }
     }
 }

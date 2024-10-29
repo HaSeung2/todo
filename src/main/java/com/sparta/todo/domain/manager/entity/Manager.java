@@ -2,6 +2,8 @@ package com.sparta.todo.domain.manager.entity;
 
 import com.sparta.todo.domain.todo.entity.Todo;
 import com.sparta.todo.domain.user.entity.User;
+import com.sparta.todo.exception.CustomException;
+import com.sparta.todo.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,7 +14,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "manager")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Manager{
+public class Manager {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,11 +30,15 @@ public class Manager{
     @JoinColumn(name = "todo_id")
     private Todo todo;
 
-    public static Manager create(User user, Todo todo) {
+    public static Manager createManager(
+        User user,
+        Todo todo
+    ) {
         Manager manager = new Manager();
         manager.managerUserName = user.getUserName();
         manager.user = user;
         manager.todo = todo;
         return manager;
     }
+
 }
