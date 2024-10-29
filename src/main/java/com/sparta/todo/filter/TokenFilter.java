@@ -39,7 +39,7 @@ public class TokenFilter extends OncePerRequestFilter {
         }
 
         Long id = jwtUtil.getUserInfo(token).get("id", Long.class);
-        User user = repository.findById(id).orElseThrow(()-> new CustomException(ErrorCode.NOT_USER_ID));
+        User user = repository.findByUserId(id);
 
         request.setAttribute("user", user);
         filterChain.doFilter(request, response);
