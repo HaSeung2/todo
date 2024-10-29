@@ -20,6 +20,7 @@ public enum ErrorCode {
     NOT_USER_ID(HttpStatus.BAD_REQUEST,"존재하지 않는 USER ID"),
     DIFFERENT_USER(HttpStatus.FORBIDDEN,"본인 계정만 삭제 및 수정할 수 있습니다."),
     NO_MY_WRITE_COMMENT(HttpStatus.FORBIDDEN,"본인이 쓴 댓글만 삭제 및 수정 할 수 있습니다."),
+    NO_MY_WRITE_TODO(HttpStatus.FORBIDDEN,"본인이 쓴 게시글만 삭제 및 수정 할 수 있습니다."),
     MANAGER_DUPLICATION(HttpStatus.FORBIDDEN,"이미 담당 유저로 배치 되어 있는 일정입니다."),
     MANAGER_MY_WRITE_TODO(HttpStatus.FORBIDDEN,"본인이 쓴 일정에만 담당유저를 배치 할 수 있습니다."),
     NOT_ADMIN(HttpStatus.FORBIDDEN,"권한이 없습니다.");
