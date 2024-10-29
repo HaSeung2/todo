@@ -11,7 +11,6 @@ import com.sparta.todo.domain.user.entity.User;
 import com.sparta.todo.exception.CustomException;
 import com.sparta.todo.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,26 +41,22 @@ public class TodoService {
 
     @Transactional
     public void todoModify(Long id, ModifyDto modifyDto, User user) {
-        Todo findTodo = isValidId(id);
-        if (findTodo.isValidWriteUser(user.getId())) {
-            findTodo.modify(modifyDto.getTitle(), modifyDto.getContent());
-        }
+        Todo findTodo = getTodo(id);
+        findTodo.modify(modifyDto.getTitle(), modifyDto.getContent());
     }
 
     public void todoDelete(Long id, User user) {
-        Todo findTodo = isValidId(id);
-        if (findTodo.isValidWriteUser(user.getId())) {
-            todoRepository.deleteById(id);
-        }
+        getTodo(id);
+        todoRepository.deleteById(id);
     }
 
     public Todo todoFindById(Long id) {
-        Todo todo = isValidId(id);
+        Todo todo = getTodo(id);
         todo.createCommentsCount(commentRepository.countByTodoId(id));
         return todo;
     }
 
-    private Todo isValidId(Long id) {
+    private Todo getTodo(Long id) {
         return todoRepository.findById(id)
                              .orElseThrow(() -> new CustomException(ErrorCode.NOT_TODO_ID));
     }

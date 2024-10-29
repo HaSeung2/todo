@@ -50,23 +50,29 @@ public class TodoController {
     }
 
     @PostMapping
-    public ResponseEntity<TodoResponseDto> todoCreate(@RequestBody @Valid TodoRequestDto reqDto,
-                                                      HttpServletRequest request) {
+    public ResponseEntity<TodoResponseDto> todoCreate(
+        @RequestBody @Valid TodoRequestDto reqDto,
+        HttpServletRequest request
+    ) {
         TodoResponseDto createTodo = todoService.todoCreate(reqDto, User.getUser(request));
         return ResponseEntity.status(HttpStatus.CREATED).body(createTodo);
     }
 
     @PutMapping("/modify/{id}")
-    public ResponseEntity<Objects> todoModify(@PathVariable("id") Long id,
-                                              @RequestBody ModifyDto modifyDto,
-                                              HttpServletRequest request) {
+    public ResponseEntity<Void> todoModify(
+        @PathVariable("id") Long id,
+        @RequestBody ModifyDto modifyDto,
+        HttpServletRequest request
+    ) {
         todoService.todoModify(id, modifyDto, User.getUser(request));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Objects> todoDelete(@PathVariable("id") Long id,
-                                              HttpServletRequest request) {
+    public ResponseEntity<Void> todoDelete(
+        @PathVariable("id") Long id,
+        HttpServletRequest request
+    ) {
         todoService.todoDelete(id, User.getUser(request));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
