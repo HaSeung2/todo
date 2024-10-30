@@ -2,8 +2,10 @@ package com.sparta.todo.domain.manager.dto;
 
 import com.sparta.todo.domain.manager.entity.Manager;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class ManagerResponseDto {
     private Long id;
     private Long todoId;

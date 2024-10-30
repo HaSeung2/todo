@@ -74,7 +74,9 @@ public class UserService {
     }
 
     public User getUser(Long id, User user) {
-        user.isValidUser(id);
+        if(!user.isValidUser(id)){
+            throw new CustomException(ErrorCode.DIFFERENT_USER);
+        };
         return userRepository.findByUserId(id);
     }
 }

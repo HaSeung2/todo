@@ -5,8 +5,10 @@ import com.sparta.todo.domain.user.entity.UserRole;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class UserResponseDto {
     private final Long id;
     private final String email;

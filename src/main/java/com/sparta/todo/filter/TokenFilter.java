@@ -42,6 +42,7 @@ public class TokenFilter extends OncePerRequestFilter {
         User user = repository.findByUserId(id);
 
         request.setAttribute("user", user);
+        request.setAttribute("userId", id);
         filterChain.doFilter(request, response);
         log.info("토큰 필터 종료");
     }

@@ -1,12 +1,12 @@
 package com.sparta.todo.domain.comment.controller;
 
 
+import com.sparta.todo.config.LoginUser;
 import com.sparta.todo.domain.comment.dto.CommentModifyRequestDto;
 import com.sparta.todo.domain.comment.dto.CommentRequestDto;
 import com.sparta.todo.domain.comment.dto.CommentResponseDto;
 import com.sparta.todo.domain.comment.service.CommentService;
 import com.sparta.todo.domain.user.entity.User;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -30,43 +30,29 @@ public class CommentController {
 
     @GetMapping("/{todoId}")
     public ResponseEntity<List<CommentResponseDto>> findByTodoId(
-        @PathVariable("todoId") Long todoId
-    ) {
+        @PathVariable("todoId") Long todoId) {
         return ResponseEntity.ok(commentService.findByTodoId(todoId));
     }
 
     @PostMapping("/{todoId}")
     public ResponseEntity<CommentResponseDto> createComment(
         @RequestBody @Valid CommentRequestDto commentRequestDto,
-        @PathVariable("todoId") Long todoId,
-        HttpServletRequest request
-    ) {
-        CommentResponseDto createComment = commentService.createComment(commentRequestDto,
-            todoId,
-            User.getUser(request)
-        );
+        @PathVariable("todoId") Long todoId, @LoginUser User user) {
+        CommentResponseDto createComment = commentService.createComment(commentRequestDto, todoId,
+            user);
         return ResponseEntity.status(HttpStatus.CREATED).body(createComment);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> modifyComment(
-        @PathVariable("id") Long id,
-        @RequestBody CommentModifyRequestDto commentModifyRequestDto,
-        HttpServletRequest request
-    ) {
-        commentService.modifyComment(id,
-            commentModifyRequestDto.getComment(),
-            User.getUser(request)
-        );
+    public ResponseEntity<Void> modifyComment(@PathVariable("id") Long id,
+        @Valid @RequestBody CommentModifyRequestDto commentModifyRequestDto, @LoginUser User user) {
+        commentService.modifyComment(id, commentModifyRequestDto.getComment(), user);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteComment(
-        @PathVariable("id") Long id,
-        HttpServletRequest request
-    ) {
-        commentService.deleteComment(id, User.getUser(request));
+    public ResponseEntity<Void> deleteComment(@PathVariable("id") Long id, @LoginUser User user) {
+        commentService.deleteComment(id, user);
         return ResponseEntity.noContent().build();
     }
 }

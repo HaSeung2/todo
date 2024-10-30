@@ -47,13 +47,9 @@ public class User extends AuditingDate {
         return user;
     }
 
-    public static User getUser(HttpServletRequest request){
-        return (User)request.getAttribute("user");
-    }
-
     public boolean isValidUser(Long id){
             if(!id.equals(this.id)){
-                throw new CustomException(ErrorCode.DIFFERENT_USER);
+                return false;
             }
             return true;
     }

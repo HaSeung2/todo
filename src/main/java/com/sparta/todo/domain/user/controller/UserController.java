@@ -1,13 +1,13 @@
 package com.sparta.todo.domain.user.controller;
 
 
+import com.sparta.todo.config.LoginUser;
 import com.sparta.todo.domain.user.dto.JoinRequestDto;
 import com.sparta.todo.domain.user.dto.LoginRequestDto;
 import com.sparta.todo.domain.user.dto.UserModifyRequestDto;
 import com.sparta.todo.domain.user.dto.UserResponseDto;
 import com.sparta.todo.domain.user.entity.User;
 import com.sparta.todo.domain.user.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -35,8 +35,8 @@ public class UserController {
     }
 
     @GetMapping("/myInfo")
-    public ResponseEntity<UserResponseDto> findMyInfo(HttpServletRequest request) {
-        return ResponseEntity.ok(userService.findById(User.getUser(request)));
+    public ResponseEntity<UserResponseDto> findMyInfo(@LoginUser User user) {
+        return ResponseEntity.ok(userService.findById(user));
     }
 
     @PostMapping("/join")
@@ -53,15 +53,15 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> modify(@PathVariable("id") Long id,
-                                       @RequestBody UserModifyRequestDto userModifyRequestDto,
-                                       HttpServletRequest request) {
-        userService.modify(id, userModifyRequestDto.getUserName(), User.getUser(request));
+                                       @Valid @RequestBody UserModifyRequestDto userModifyRequestDto,
+                                        @LoginUser User user) {
+        userService.modify(id, userModifyRequestDto.getUserName(), user);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Long id, HttpServletRequest request) {
-        userService.delete(id, User.getUser(request));
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id,  @LoginUser User user) {
+        userService.delete(id, user);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

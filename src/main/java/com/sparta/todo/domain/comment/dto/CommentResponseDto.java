@@ -4,8 +4,10 @@ import com.sparta.todo.domain.comment.entity.Comment;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class CommentResponseDto {
     private Long id;
     private String userName;

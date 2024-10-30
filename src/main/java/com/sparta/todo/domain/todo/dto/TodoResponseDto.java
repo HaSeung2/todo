@@ -4,8 +4,10 @@ import com.sparta.todo.domain.todo.entity.Todo;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class TodoResponseDto {
     private final Long id;
     private final String title;
