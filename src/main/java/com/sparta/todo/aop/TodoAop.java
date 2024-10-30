@@ -2,6 +2,7 @@ package com.sparta.todo.aop;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -41,11 +42,12 @@ public class TodoAop {
     @Around("user() || todo() || comment() || manager()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         LocalDateTime requestTime = LocalDateTime.now();
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formattedDate = requestTime.format(format);
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         Long userId = (Long) request.getAttribute("userId");
-        log.info("Request : {} {} {} {}", request.getMethod(), request.getRequestURI(),
-            params(joinPoint), requestTime);
+        log.info("Request : {} {} {} {}", request.getMethod(), request.getRequestURI(), params(joinPoint), formattedDate);
         log.info("사용자 Id : {}", userId);
 
         Object obj = joinPoint.proceed();

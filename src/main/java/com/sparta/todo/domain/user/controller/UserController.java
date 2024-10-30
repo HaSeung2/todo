@@ -45,22 +45,19 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserResponseDto> login(
-        @Valid @RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<UserResponseDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
         UserResponseDto user = userService.login(loginRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> modify(@PathVariable("id") Long id,
-                                       @Valid @RequestBody UserModifyRequestDto userModifyRequestDto,
-                                        @LoginUser User user) {
+    public ResponseEntity<Void> modify(@PathVariable("id") Long id, @Valid @RequestBody UserModifyRequestDto userModifyRequestDto, @LoginUser User user) {
         userService.modify(id, userModifyRequestDto.getUserName(), user);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Long id,  @LoginUser User user) {
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id, @LoginUser User user) {
         userService.delete(id, user);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

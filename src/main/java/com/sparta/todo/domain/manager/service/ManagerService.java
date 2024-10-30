@@ -1,5 +1,6 @@
 package com.sparta.todo.domain.manager.service;
 
+import com.sparta.todo.domain.manager.dto.ManagerResponseDto;
 import com.sparta.todo.domain.manager.entity.Manager;
 import com.sparta.todo.domain.manager.repository.ManagerRepository;
 import com.sparta.todo.domain.todo.entity.Todo;
@@ -24,60 +25,50 @@ public class ManagerService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Manager managerCreate(
-        Long todoId,
-        Long userId,
-        User user
-    ) {
+    public ManagerResponseDto managerCreate(Long todoId, Long userId, User user) {
         User paramUser = getUser(userId);
         Todo todo = differentCheckTodoId(todoId, userId, user);
 
         validatedDuplicatedManager(paramUser.getId(), todo.getId());
 
         Manager manager = Manager.createManager(paramUser, todo);
-        return managerRepository.save(manager);
+        return new ManagerResponseDto(managerRepository.save(manager));
     }
 
     @Transactional
-    public void delete(
-        Long id,
-        User user
-    ) {
+    public void delete(Long id, User user) {
         isValidManagerAndUserId(id, user);
         managerRepository.deleteById(id);
     }
 
-    private void isValidManagerAndUserId(
-        Long id,
-        User user
-    ) {
-        managerRepository.findByIdAndUserId(id, user.getId())
-                         .orElseThrow(() -> new CustomException(ErrorCode.NOT_MANAGER));
+    private void isValidManagerAndUserId(Long id, User user) {
+        if (!managerRepository.existsByUserIdAndUserId(id, user.getId())) {
+            throw new CustomException(ErrorCode.NOT_MANAGER);
+        }
     }
 
-
-    private void validatedDuplicatedManager(
-        Long paramUserId,
-        Long todoId
-    ) {
-        managerRepository.findByUserIdAndTodoId(paramUserId, todoId).ifPresent(a -> {
+    private void validatedDuplicatedManager(Long paramUserId, Long todoId) {
+        if (managerRepository.existsByUserIdAndTodoId(paramUserId, todoId)) {
             throw new CustomException(ErrorCode.MANAGER_DUPLICATION);
-        });
+        }
     }
 
-    private Todo differentCheckTodoId(
-        Long id,
-        Long userId,
-        User user
-    ) {
-        Todo todo = todoRepository.findById(id)
-                                  .orElseThrow(() -> new CustomException(ErrorCode.NOT_TODO_ID));
-        todo.validWriteUser(userId, user);
+    private Todo differentCheckTodoId(Long id, Long userId, User user) {
+        Todo todo = todoRepository.findByTodoId(id);
+        validWriteUser(todo, userId, user);
         return todo;
     }
 
     private User getUser(Long id) {
-        return userRepository.findById(id)
-                             .orElseThrow(() -> new CustomException(ErrorCode.NOT_USER_ID));
+        return userRepository.findByUserId(id);
+    }
+
+    private void validWriteUser(Todo todo, Long id, User user) {
+        if (!todo.getUser().getId().equals(user.getId())) {
+            throw new CustomException(ErrorCode.MANAGER_MY_WRITE_TODO);
+        }
+        if (todo.getUser().getId().equals(id)) {
+            throw new CustomException(ErrorCode.NO_MANAGER_MY);
+        }
     }
 }

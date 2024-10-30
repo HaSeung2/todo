@@ -1,9 +1,8 @@
 package com.sparta.todo.domain.todo.dto;
 
 import com.sparta.todo.domain.todo.entity.Todo;
-import lombok.Getter;
-
 import java.time.LocalDateTime;
+import lombok.Getter;
 import lombok.ToString;
 
 @Getter

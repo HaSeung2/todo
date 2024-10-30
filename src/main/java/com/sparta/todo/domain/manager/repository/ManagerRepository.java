@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface ManagerRepository extends JpaRepository<Manager,Long> {
-    Optional<Manager> findByUserIdAndTodoId(Long paramUserId, Long todoId);
+    boolean existsByUserIdAndTodoId(Long paramUserId, Long todoId);
 
-    Optional<Manager> findByIdAndUserId(Long id, Long userId);
+    boolean existsByUserIdAndUserId(Long id, Long userId);
 }

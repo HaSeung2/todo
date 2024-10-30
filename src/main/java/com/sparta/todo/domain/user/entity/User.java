@@ -3,16 +3,21 @@ package com.sparta.todo.domain.user.entity;
 import com.sparta.todo.date.AuditingDate;
 import com.sparta.todo.domain.manager.entity.Manager;
 import com.sparta.todo.domain.todo.entity.Todo;
-import com.sparta.todo.exception.CustomException;
-import com.sparta.todo.exception.ErrorCode;
-import jakarta.persistence.*;
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -45,10 +50,6 @@ public class User extends AuditingDate {
         user.userName = userName;
         user.role = role;
         return user;
-    }
-
-    public boolean isValidUser(Long id){
-        return id.equals(this.id);
     }
 
     public void modify(String userName) {

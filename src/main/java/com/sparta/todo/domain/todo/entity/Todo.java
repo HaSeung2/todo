@@ -4,8 +4,6 @@ import com.sparta.todo.date.AuditingDate;
 import com.sparta.todo.domain.comment.entity.Comment;
 import com.sparta.todo.domain.manager.entity.Manager;
 import com.sparta.todo.domain.user.entity.User;
-import com.sparta.todo.exception.CustomException;
-import com.sparta.todo.exception.ErrorCode;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -56,12 +54,7 @@ public class Todo extends AuditingDate {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static Todo createTodo(
-        String title,
-        String content,
-        User user,
-        String weather
-    ) {
+    public static Todo createTodo(String title, String content, User user, String weather) {
         Todo todo = new Todo();
         todo.title = title;
         todo.content = content;
@@ -70,27 +63,12 @@ public class Todo extends AuditingDate {
         return todo;
     }
 
-    public void modify(
-        String title,
-        String content
-    ) {
+    public void modify(String title, String content) {
         this.title = title;
         this.content = content;
     }
 
     public void createCommentsCount(int commentCount) {
         this.commentCount = commentCount;
-    }
-
-    public void validWriteUser(
-        Long id,
-        User user
-    ) {
-        if (! this.getUser().getId().equals(user.getId())) {
-            throw new CustomException(ErrorCode.MANAGER_MY_WRITE_TODO);
-        }
-        if (this.getUser().getId().equals(id)) {
-            throw new CustomException(ErrorCode.NO_MANAGER_MY);
-        }
     }
 }

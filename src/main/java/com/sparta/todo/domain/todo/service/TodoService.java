@@ -8,14 +8,11 @@ import com.sparta.todo.domain.todo.dto.TodoResponseDto;
 import com.sparta.todo.domain.todo.entity.Todo;
 import com.sparta.todo.domain.todo.repository.TodoRepository;
 import com.sparta.todo.domain.user.entity.User;
-import com.sparta.todo.exception.CustomException;
-import com.sparta.todo.exception.ErrorCode;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,10 +23,17 @@ public class TodoService {
     private final CommentRepository commentRepository;
 
     public List<TodoResponseDto> todoFindAll(Pageable pageable) {
-            return todoRepository.findAll(pageable).map(todo ->{
+        return todoRepository.findAll(pageable).map(todo -> {
                 todo.createCommentsCount(commentRepository.countByTodoId(todo.getId()));
                 return new TodoResponseDto(todo);
-            }).toList();
+            })
+            .toList();
+    }
+
+    public TodoResponseDto todoFindById(Long id) {
+        Todo todo = getTodo(id);
+        todo.createCommentsCount(commentRepository.countByTodoId(id));
+        return new TodoResponseDto(todo);
     }
 
     public TodoResponseDto todoCreate(TodoRequestDto reqDto, User user) {
@@ -40,25 +44,18 @@ public class TodoService {
     }
 
     @Transactional
-    public void todoModify(Long id, ModifyDto modifyDto, User user) {
+    public void todoModify(Long id, ModifyDto modifyDto) {
         Todo findTodo = getTodo(id);
         findTodo.modify(modifyDto.getTitle(), modifyDto.getContent());
     }
 
-    public void todoDelete(Long id, User user) {
+    public void todoDelete(Long id) {
         getTodo(id);
         todoRepository.deleteById(id);
     }
 
-    public Todo todoFindById(Long id) {
-        Todo todo = getTodo(id);
-        todo.createCommentsCount(commentRepository.countByTodoId(id));
-        return todo;
-    }
-
-    private Todo getTodo(Long id) {
-        return todoRepository.findById(id)
-                             .orElseThrow(() -> new CustomException(ErrorCode.NOT_TODO_ID));
+    public Todo getTodo(Long id) {
+        return todoRepository.findByTodoId(id);
     }
 }
 

@@ -1,14 +1,14 @@
 package com.sparta.todo.domain.comment.dto;
 
 import com.sparta.todo.domain.comment.entity.Comment;
-import lombok.Getter;
-
 import java.time.LocalDateTime;
+import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString
 public class CommentResponseDto {
+
     private Long id;
     private String userName;
     private String content;

@@ -21,16 +21,13 @@ public class ManagerController {
     private final ManagerService managerService;
 
     @PostMapping
-    public ResponseEntity<ManagerResponseDto> managerCreate(Long todoId, Long userId,
-        @LoginUser User user) {
-        ManagerResponseDto responseDto = new ManagerResponseDto(
-            managerService.managerCreate(todoId, userId, user));
+    public ResponseEntity<ManagerResponseDto> managerCreate(Long todoId, Long userId, @LoginUser User user) {
+        ManagerResponseDto responseDto = managerService.managerCreate(todoId, userId, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ManagerResponseDto> managerDelete(@PathVariable("id") Long id,
-        @LoginUser User user) {
+    public ResponseEntity<ManagerResponseDto> managerDelete(@PathVariable("id") Long id, @LoginUser User user) {
         managerService.delete(id, user);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

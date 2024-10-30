@@ -6,6 +6,7 @@ import com.sparta.todo.domain.comment.dto.CommentModifyRequestDto;
 import com.sparta.todo.domain.comment.dto.CommentRequestDto;
 import com.sparta.todo.domain.comment.dto.CommentResponseDto;
 import com.sparta.todo.domain.comment.service.CommentService;
+import com.sparta.todo.domain.todo.service.TodoService;
 import com.sparta.todo.domain.user.entity.User;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -27,25 +28,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentController {
 
     private final CommentService commentService;
+    private final TodoService todoService;
 
     @GetMapping("/{todoId}")
-    public ResponseEntity<List<CommentResponseDto>> findByTodoId(
-        @PathVariable("todoId") Long todoId) {
-        return ResponseEntity.ok(commentService.findByTodoId(todoId));
+    public ResponseEntity<List<CommentResponseDto>> findByTodoId(@PathVariable("todoId") Long todoId) {
+        return ResponseEntity.ok(commentService.findByTodoId(todoService.getTodo(todoId)));
     }
 
     @PostMapping("/{todoId}")
-    public ResponseEntity<CommentResponseDto> createComment(
-        @RequestBody @Valid CommentRequestDto commentRequestDto,
-        @PathVariable("todoId") Long todoId, @LoginUser User user) {
-        CommentResponseDto createComment = commentService.createComment(commentRequestDto, todoId,
-            user);
+    public ResponseEntity<CommentResponseDto> createComment(@RequestBody @Valid CommentRequestDto commentRequestDto, @PathVariable("todoId") Long todoId, @LoginUser User user) {
+        CommentResponseDto createComment = commentService.createComment(commentRequestDto,
+            todoService.getTodo(todoId), user);
         return ResponseEntity.status(HttpStatus.CREATED).body(createComment);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> modifyComment(@PathVariable("id") Long id,
-        @Valid @RequestBody CommentModifyRequestDto commentModifyRequestDto, @LoginUser User user) {
+    public ResponseEntity<Void> modifyComment(@PathVariable("id") Long id, @Valid @RequestBody CommentModifyRequestDto commentModifyRequestDto, @LoginUser User user) {
         commentService.modifyComment(id, commentModifyRequestDto.getComment(), user);
         return ResponseEntity.noContent().build();
     }

@@ -4,7 +4,6 @@ import com.sparta.todo.config.LoginUser;
 import com.sparta.todo.domain.todo.dto.ModifyDto;
 import com.sparta.todo.domain.todo.dto.TodoRequestDto;
 import com.sparta.todo.domain.todo.dto.TodoResponseDto;
-import com.sparta.todo.domain.todo.entity.Todo;
 import com.sparta.todo.domain.todo.service.TodoService;
 import com.sparta.todo.domain.user.entity.User;
 import jakarta.validation.Valid;
@@ -34,10 +33,8 @@ public class TodoController {
     private final TodoService todoService;
 
     @GetMapping
-    public ResponseEntity<List<TodoResponseDto>> todoFindAll(
-        @RequestParam(defaultValue = "1", value = "nowPage") int nowPage) {
-        Pageable pageable = PageRequest.of(nowPage - 1, pageSize, Sort.Direction.DESC,
-            "modifiedAt");
+    public ResponseEntity<List<TodoResponseDto>> todoFindAll(@RequestParam(defaultValue = "1", value = "nowPage") int nowPage) {
+        Pageable pageable = PageRequest.of(nowPage - 1, pageSize, Sort.Direction.DESC, "modifiedAt");
         List<TodoResponseDto> todo = todoService.todoFindAll(pageable);
         if (todo.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -47,27 +44,25 @@ public class TodoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TodoResponseDto> todoFindById(@PathVariable("id") Long id) {
-        Todo todo = todoService.todoFindById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(new TodoResponseDto(todo));
+        TodoResponseDto todo = todoService.todoFindById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(todo);
     }
 
     @PostMapping
-    public ResponseEntity<TodoResponseDto> todoCreate(@RequestBody @Valid TodoRequestDto reqDto,
-        @LoginUser User user) {
+    public ResponseEntity<TodoResponseDto> todoCreate(@RequestBody @Valid TodoRequestDto reqDto, @LoginUser User user) {
         TodoResponseDto createTodo = todoService.todoCreate(reqDto, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(createTodo);
     }
 
     @PutMapping("/modify/{id}")
-    public ResponseEntity<Void> todoModify(@PathVariable("id") Long id,
-        @Valid @RequestBody ModifyDto modifyDto, @LoginUser User user) {
-        todoService.todoModify(id, modifyDto, user);
+    public ResponseEntity<Void> todoModify(@PathVariable("id") Long id, @Valid @RequestBody ModifyDto modifyDto) {
+        todoService.todoModify(id, modifyDto);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> todoDelete(@PathVariable("id") Long id, @LoginUser User user) {
-        todoService.todoDelete(id, user);
+    public ResponseEntity<Void> todoDelete(@PathVariable("id") Long id) {
+        todoService.todoDelete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
