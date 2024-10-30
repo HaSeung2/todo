@@ -48,10 +48,7 @@ public class User extends AuditingDate {
     }
 
     public boolean isValidUser(Long id){
-            if(!id.equals(this.id)){
-                return false;
-            }
-            return true;
+        return id.equals(this.id);
     }
 
     public void modify(String userName) {
