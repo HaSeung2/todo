@@ -55,7 +55,8 @@ public class ManagerService {
 
     private Todo differentCheckTodoId(Long id, Long userId, User user) {
         Todo todo = todoRepository.findByTodoId(id);
-        validWriteUser(todo, userId, user);
+        validWriteUser(todo, user);
+        validUser(todo, userId);
         return todo;
     }
 
@@ -63,10 +64,13 @@ public class ManagerService {
         return userRepository.findByUserId(id);
     }
 
-    private void validWriteUser(Todo todo, Long id, User user) {
+    private void validWriteUser(Todo todo, User user) {
         if (!todo.getUser().getId().equals(user.getId())) {
             throw new CustomException(ErrorCode.MANAGER_MY_WRITE_TODO);
         }
+    }
+
+    private void validUser(Todo todo, Long id){
         if (todo.getUser().getId().equals(id)) {
             throw new CustomException(ErrorCode.NO_MANAGER_MY);
         }
