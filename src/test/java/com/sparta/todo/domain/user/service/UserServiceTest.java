@@ -1,8 +1,12 @@
 package com.sparta.todo.domain.user.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 
 import com.sparta.todo.config.PasswordEncoder;
 import com.sparta.todo.domain.user.dto.JoinRequestDto;
@@ -21,6 +25,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -161,6 +166,32 @@ class UserServiceTest {
         });
 
         assertEquals("본인 계정만 삭제 및 수정할 수 있습니다.", exception.getErrorCode().getMessage());
+    }
+
+    @Test
+    @DisplayName("삭제 요청 성공")
+    void test9(){
+        Long userId = 1L;
+        User user = User.createUser("dldl@naver.com","1234","승승", UserRole.USER);
+        ReflectionTestUtils.setField(user, "id", userId);
+
+        userService.delete(userId, user);
+        Mockito.verify(userRepository, times(1)).delete(any());
+    }
+
+    @Test
+    @DisplayName("수정 요청 성공")
+    void test10(){
+        Long userId = 1L;
+        String userName = "승승승";
+        User user = mock(User.class);
+        ReflectionTestUtils.setField(user, "id", userId);
+
+        given(user.getId()).willReturn(userId);
+        given(userRepository.findByUserId(userId)).willReturn(user);
+
+        userService.modify(userId,userName,user);
+        Mockito.verify(user, times(1)).modify(any());
     }
 }
 
