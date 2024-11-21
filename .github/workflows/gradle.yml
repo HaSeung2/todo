@@ -10,6 +10,8 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
     - uses: actions/checkout@v4
@@ -23,10 +25,10 @@ jobs:
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0    
 
     - name : Make application.properties
-      run : |
+      run: |
         cd ./src/main/resources
         touch ./application.properties
-        echo "${{ secrets.APPLICATION }}" >> ./application.properties
+        echo "${{secrets.APPLICATION}}" >> ./application.properties
       shell: bash
     
     - name: Build with Gradle Wrapper
