@@ -23,6 +23,10 @@ jobs:
        uses: microsoft/variable-substitution@v1
        with:
           files: ./src/main/resources/application.properties
+       env : 
+           spring.database.url: ${{ secrets.DATABASE_URL}}
+           spring.database.username: ${{ secrets.DATABASE_USERNAMe}}
+           spring.database.password: ${{ secrets.DATABASE_PASSWORD}}
          
 
     - name: Setup Gradle
