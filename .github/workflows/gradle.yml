@@ -26,7 +26,7 @@ jobs:
       run : |
         cd ./src/main
         touch ./resources/application.properties
-        echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application.properties
+        echo "${{ secrets.APPLICATION }}" > ./resources/application.properties
       shell: bash
     
     - name: Build with Gradle Wrapper
