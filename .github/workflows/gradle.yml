@@ -33,6 +33,6 @@
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
         
-      - name: Build with Gradle Wrapper
-        run: ./gradlew --debug build
+      - name: Gradle bootJar
+        run: ./gradlew bootJar
 
