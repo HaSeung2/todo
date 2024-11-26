@@ -54,7 +54,7 @@ public class ManagerService {
     }
 
     private Todo differentCheckTodoId(Long id, Long userId, User user) {
-        Todo todo = todoRepository.findByTodoId(id);
+        Todo todo = todoRepository.findByTodoId(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_TODO_ID));
         validWriteUser(todo, user);
         validUser(todo, userId);
         return todo;

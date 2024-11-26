@@ -7,8 +7,8 @@ import com.sparta.todo.domain.todo.dto.TodoResponseDto;
 import com.sparta.todo.domain.todo.service.TodoService;
 import com.sparta.todo.domain.user.entity.User;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -33,13 +33,9 @@ public class TodoController {
     private final TodoService todoService;
 
     @GetMapping
-    public ResponseEntity<List<TodoResponseDto>> todoFindAll(@RequestParam(defaultValue = "1", value = "nowPage") int nowPage) {
+    public ResponseEntity<Page<TodoResponseDto>> todoFindAll(@RequestParam(defaultValue = "1", value = "nowPage") int nowPage) {
         Pageable pageable = PageRequest.of(nowPage - 1, pageSize, Sort.Direction.DESC, "modifiedAt");
-        List<TodoResponseDto> todo = todoService.todoFindAll(pageable);
-        if (todo.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(todo);
+        return ResponseEntity.status(HttpStatus.OK).body(todoService.todoFindAll(pageable));
     }
 
     @GetMapping("/{id}")
