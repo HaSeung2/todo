@@ -10,6 +10,7 @@ import com.sparta.todo.domain.todo.repository.TodoRepository;
 import com.sparta.todo.domain.user.entity.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ public class TodoService {
     private final WeatherService weatherService;
     private final CommentRepository commentRepository;
 
+    @Cacheable(cacheNames = "getTodos", key = "'todos:page' + #pageable.pageNumber + ':size:' + #pageable.pageSize", cacheManager = "cacheManager")
     public List<TodoResponseDto> todoFindAll(Pageable pageable) {
         return todoRepository.findAll(pageable).map(todo -> {
                 todo.createCommentsCount(commentRepository.countByTodoId(todo.getId()));
